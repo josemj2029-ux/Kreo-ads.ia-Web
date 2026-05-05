@@ -9,9 +9,26 @@
 <meta property="og:description" content="Deja de quemar presupuesto. Campañas optimizadas con IA para clientes reales.">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline'; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src https://script.google.com; frame-ancestors 'none';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'unsafe-inline' https://connect.facebook.net; style-src 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: blob: https://www.facebook.com; connect-src https://script.google.com https://connect.facebook.net; frame-ancestors 'none';">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta http-equiv="Permissions-Policy" content="camera=(), microphone=(), geolocation=()">
+<!-- Meta Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s)
+{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];
+s.parentNode.insertBefore(t,s)}(window, document,'script',
+'https://connect.facebook.net/en_US/fbevents.js');
+fbq('init', '1339840008009717');
+fbq('track', 'PageView');
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=1339840008009717&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Meta Pixel Code -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -827,7 +844,37 @@ footer p{font-size:14px;color:var(--g3);letter-spacing:-.01em}
 }
 
 /* ═══════════════════════════════════════════
-   LEAD CAPTURE FORM
+   HERO FORM
+═══════════════════════════════════════════ */
+.hero-form-wrap{
+  max-width:640px;margin:0 auto;
+  opacity:0;animation:wordUp .7s var(--ease) 1.5s both
+}
+.hero-form-row{
+  display:flex;gap:10px;margin-bottom:8px
+}
+.hero-form-row .form-input{flex:1;min-width:0}
+.hero-form-row .btn-form-submit{
+  width:auto;flex-shrink:0;white-space:nowrap;
+  padding:16px 22px;font-size:14px;margin-top:0
+}
+.hero-form-errors{display:flex;gap:24px;padding-left:2px;min-height:20px}
+.hero-scroll-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-size:13px;color:var(--g3);margin-top:18px;
+  transition:color .3s
+}
+.hero-scroll-link:hover{color:var(--g2)}
+.hero-scroll-link svg{transition:transform .3s}
+.hero-scroll-link:hover svg{transform:translateX(3px)}
+@media(max-width:640px){
+  .hero-form-row{flex-direction:column}
+  .hero-form-row .btn-form-submit{width:100%;padding:16px}
+  .hero-form-errors{flex-direction:column;gap:4px}
+}
+
+/* ═══════════════════════════════════════════
+   LEAD CAPTURE FORM (shared)
 ═══════════════════════════════════════════ */
 .lead-form{max-width:460px;margin:0 auto;position:relative;z-index:2}
 .form-group{margin-bottom:14px;position:relative;text-align:left}
@@ -976,13 +1023,44 @@ footer p{font-size:14px;color:var(--g3);letter-spacing:-.01em}
     <div class="hero-typewriter-wrap">
       <span class="hero-typewriter" id="typewriter"></span><span class="cursor-blink"></span>
     </div>
-    <div class="hero-ctas">
-      <a href="#cta-final" class="btn-gold">
-        Quiero más leads
-      </a>
-      <a href="#proceso" class="btn-outline">
+    <div class="hero-form-wrap" id="leadFormContainer">
+      <!-- Step 1 -->
+      <div id="formStep1">
+        <form id="leadForm" novalidate autocomplete="off">
+          <div class="hp-field" aria-hidden="true">
+            <label for="hpField">Leave blank</label>
+            <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off">
+          </div>
+          <div class="rate-msg" id="rateLimitMsg"></div>
+          <div class="hero-form-row">
+            <input type="text" id="fieldName" class="form-input" placeholder="Tu nombre" maxlength="100" autocomplete="name">
+            <input type="email" id="fieldEmail" class="form-input" placeholder="Tu email" maxlength="150" autocomplete="email">
+            <button type="submit" class="btn-form-submit" id="formSubmitBtn">Quiero más clientes →</button>
+          </div>
+          <div class="hero-form-errors">
+            <div class="form-err" id="nameError">Ingresa tu nombre.</div>
+            <div class="form-err" id="emailError">Ingresa un email válido.</div>
+          </div>
+          <p class="form-privacy">Sin spam · Sin compromisos · Respuesta en menos de 24h</p>
+        </form>
+      </div>
+      <!-- Step 2 -->
+      <div id="formStep2" class="hidden">
+        <div class="form-success">
+          <div class="success-icon">
+            <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+          </div>
+          <div class="success-title">Recibido</div>
+          <p class="success-sub">Un especialista te atenderá por WhatsApp para conocer tu negocio.</p>
+          <a id="waFinalBtn" href="#" class="btn-wa-success" target="_blank" rel="noopener noreferrer">
+            <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            Abrir WhatsApp ahora
+          </a>
+        </div>
+      </div>
+      <a href="#proceso" class="hero-scroll-link">
         Ver cómo funciona
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
       </a>
     </div>
   </div>
@@ -1147,34 +1225,32 @@ footer p{font-size:14px;color:var(--g3);letter-spacing:-.01em}
   <div class="container">
     <div class="metrics-header reveal">
       <div class="gold-line sec-center"></div>
-      <span class="sec-eyebrow">Resultados</span>
-      <h2 class="sec-title">Números que<br>no mienten.</h2>
+      <span class="sec-eyebrow">Nuestro compromiso</span>
+      <h2 class="sec-title">Lo que puedes<br>esperar de nosotros.</h2>
     </div>
     <div class="gold-divider reveal"></div>
     <div class="metrics-grid">
       <div class="metric-cell reveal">
         <div class="metric-num">
-          <span class="metric-prefix">+</span><span class="counter" data-target="150" data-prefix="">0</span>
+          <span class="counter" data-target="48">0</span><span class="metric-suffix">h</span>
         </div>
-        <div class="metric-label">Campañas<br>gestionadas</div>
+        <div class="metric-label">Campañas activas<br>en menos de</div>
       </div>
       <div class="metric-cell reveal rd1">
         <div class="metric-num">
-          <span class="counter" data-target="32" data-decimal="1">0</span><span class="metric-suffix">x</span>
+          <span class="counter" data-target="100">0</span><span class="metric-suffix">%</span>
         </div>
-        <div class="metric-label">ROI promedio<br>de clientes</div>
+        <div class="metric-label">Transparencia<br>en cada reporte</div>
       </div>
       <div class="metric-cell reveal rd2">
-        <div class="metric-num">
-          <span class="metric-prefix">$</span><span class="counter" data-target="2" data-suffix="M">0</span>
-        </div>
-        <div class="metric-label">En ventas<br>generadas</div>
+        <div class="metric-num" style="font-size:clamp(36px,4vw,56px);letter-spacing:-.03em">24/7</div>
+        <div class="metric-label">IA optimizando<br>tus campañas</div>
       </div>
       <div class="metric-cell reveal rd3">
         <div class="metric-num">
-          <span class="counter" data-target="48">0</span><span class="metric-suffix">h</span>
+          <span class="counter" data-target="0">0</span><span class="metric-suffix" style="font-size:.45em;letter-spacing:0;margin-left:6px;line-height:1.2">meses<br>mínimos</span>
         </div>
-        <div class="metric-label">Tiempo de<br>lanzamiento</div>
+        <div class="metric-label">Sin contratos<br>de permanencia</div>
       </div>
     </div>
     <div class="gold-divider reveal" style="margin-bottom:0;margin-top:1px"></div>
@@ -1263,50 +1339,15 @@ footer p{font-size:14px;color:var(--g3);letter-spacing:-.01em}
     <div class="reveal" style="text-align:center">
       <div class="cta-urgency"><span class="urgency-dot"></span>Plazas limitadas este mes</div>
       <h2 class="cta-headline">¿Listo para dejar de<br>quemar presupuesto?</h2>
-      <p class="cta-sub">Agenda una auditoría gratuita de 30 minutos. Te mostramos exactamente qué falla en tu publicidad y cómo lo arreglaríamos.</p>
+      <p class="cta-sub">Cuéntanos sobre tu negocio. Analizamos tu situación y te mostramos exactamente cómo podemos ayudarte a conseguir más clientes.</p>
       <div class="countdown">
         Oferta expira en &nbsp;<strong id="timerH">23</strong>&nbsp;:&nbsp;<strong id="timerM">59</strong>&nbsp;:&nbsp;<strong id="timerS">59</strong>
       </div>
-      <!-- Two-step lead capture form -->
-      <div class="lead-form" id="leadFormContainer">
-        <!-- Step 1: Capture -->
-        <div id="formStep1">
-          <form id="leadForm" novalidate autocomplete="off">
-            <!-- Honeypot: bots fill this, humans don't -->
-            <div class="hp-field" aria-hidden="true">
-              <label for="hpField">Leave blank</label>
-              <input type="text" id="hpField" name="website" tabindex="-1" autocomplete="off">
-            </div>
-            <div class="rate-msg" id="rateLimitMsg"></div>
-            <div class="form-group">
-              <input type="text" id="fieldName" class="form-input" placeholder="Tu nombre completo" maxlength="100" autocomplete="name">
-              <div class="form-err" id="nameError">Por favor ingresa tu nombre.</div>
-            </div>
-            <div class="form-group">
-              <input type="email" id="fieldEmail" class="form-input" placeholder="Tu email de trabajo" maxlength="150" autocomplete="email">
-              <div class="form-err" id="emailError">Ingresa un email válido.</div>
-            </div>
-            <button type="submit" class="btn-form-submit" id="formSubmitBtn">
-              Quiero mi auditoría gratuita
-            </button>
-            <p class="form-privacy">Sin spam · Tus datos están seguros · Sin compromisos</p>
-          </form>
-        </div>
-        <!-- Step 2: Success -->
-        <div id="formStep2" class="hidden">
-          <div class="form-success">
-            <div class="success-icon">
-              <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <div class="success-title">Recibido</div>
-            <p class="success-sub">Abre WhatsApp para coordinar<br>tu auditoría gratuita ahora mismo.</p>
-            <a id="waFinalBtn" href="#" class="btn-wa-success" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-              Abrir WhatsApp ahora
-            </a>
-          </div>
-        </div>
-      </div>
+      <a href="https://wa.me/message/LXBR4TYKSKM2P1" class="btn-wa-big" target="_blank" rel="noopener noreferrer">
+        <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Empieza tu campaña →
+      </a>
+      <p class="cta-note">Sin compromisos. Sin tarjeta de crédito. Solo resultados reales.</p>
     </div>
   </div>
 </section>
@@ -1650,14 +1691,17 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
 
     /* Build WhatsApp URL — open in same user gesture to avoid popup block */
     const msg = encodeURIComponent(
-      'Hola, soy ' + rawName + ' (' + rawEmail + '). Quiero agendar mi auditoría gratuita con Kreo Ads.ia.'
+      'Hola, soy ' + rawName + ' (' + rawEmail + '). Me interesa conocer más sobre los servicios de Kreo Ads.ia.'
     );
     const waUrl = WA_BASE + '?text=' + msg;
     waBtn.href = waUrl;
     window.open(waUrl, '_blank', 'noopener,noreferrer');
 
+    /* Meta Pixel — Lead event */
+    if (typeof fbq === 'function') fbq('track', 'Lead');
+
     /* Send to webhook (fire-and-forget) */
-    sendWebhook({ name: rawName, email: rawEmail, ts: new Date().toISOString(), src: 'cta' });
+    sendWebhook({ name: rawName, email: rawEmail, ts: new Date().toISOString(), src: 'hero' });
 
     /* Transition to success step */
     submitBtn.disabled = true;
